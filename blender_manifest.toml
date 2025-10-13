@@ -1,0 +1,19 @@
+schema_version = "1.0.0"
+
+blender_version_min = "4.2.0"
+
+id = "naythan_simple_retargeter"
+name = "simple retargeter"
+
+# License conforming to https://spdx.org/licenses/ (use "SPDX: prefix)
+# https://docs.blender.org/manual/en/dev/advanced/extensions/licenses.html
+license = [ "SPDX:GPL-3.0-or-later", ]
+maintainer = "naythan_touqe"
+version = "0.0.1"
+tagline = "simple retargeting addon"
+type = "add-on"
+# TODO : Add github link
+# website = "https://extensions.blender.org/add-ons/my-example-package/"
+tags = ["Animation", "Rigging"]
+platforms = ["windows-x64",  "windows-arm64", "macos-arm64", "macos-x64", "linux-x64"]
+
