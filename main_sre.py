@@ -1,60 +1,69 @@
 import bpy
 
-_ID_PREFIX = "simple_retargeting"
-
-# Bones mapper
-class bone_node:
-    def __init__(
-            self,
-            bone_idx
-            ):
-        self.bone_idx = bone_idx
-        self.childs_idx_list = []
-
-    def append_child_idx(self, child_idx):
-        self.childs_idx_list.append(child_idx)
-
-
-class bones_mapper:
-    def __init__(
-            self,
-            master_bones_list,
-            ):
-        self.master_bones_list = master_bones_list
-        self.bones_node_list = []
-
-
-    def mapping(self):
-        name_to_idx_dict = {}
-        # Construct Node
-        for i, b in  enumerate(self.master_bones_list):
-            name_to_idx_dict[b.name] = i
-            node = bone_node(name_to_idx_dict[b.name])
-            self.bones_node_list.append()
-        # Link child-parent
-        for i, b in  enumerate(self.master_bones_list):
-        pass
-        
-        pass
+_ID_PREFIX = "simple_retargetor"
 
 
 
 
+# SEE: RNA_PROP_simple_retargeting -> rot_maping_from_preset
+class RNA_PROP_rot_maping_from_preset(bpy.types.PropertyGroup):
+    _ENUM_XYZ = [
+                ('x', "X", "", '', 0),
+                ('y', "Y", "", '', 1),
+                ('z', "Z", "", '', 2),
+                ]
 
-# SEE: def _prop_register()
-class RNA_PROP_Simple_retargeting(bpy.types.PropertyGroup):
-    armature_host: bpy.props.PointerProperty(type=bpy.types.Armature)
-    armature_target: bpy.props.PointerProperty(type=bpy.types.Armature)
+    x_from: bpy.props.EnumProperty(
+            items=_ENUM_XYZ,
+            name="",
+            default='x', # X from X
+            )
+
+    y_from: bpy.props.EnumProperty(
+            items=_ENUM_XYZ,
+            name="",
+            default='y', # Y from Y
+            )
+
+    z_from: bpy.props.EnumProperty(
+            items=_ENUM_XYZ,
+            name="",
+            default='z', # Z from Z
+            )
 
 
-class VIEW_3D_PT_ui_proto():
+# SEE: _prop_register()
+class RNA_PROP_simple_retargeting(bpy.types.PropertyGroup):
+    loc_maping_preset: bpy.props.BoolVectorProperty(name="", default=(True,True,True,) ,subtype='XYZ')
+
+    _ENUM_EULER_ORDER = [
+            ('AUTO',"Auto selected", "", '', 0),
+            ('XYZ', "XYZ Euler",     "", '', 1),
+            ('XZY', "XZY Euler",     "", '', 2),
+            ('YXZ', "YXZ Euler",     "", '', 3),
+            ('YZX', "YZX Euler",     "", '', 4),
+            ('ZXY', "ZXY Euler",     "", '', 5),
+            ('ZYX', "ZYX Euler",     "", '', 6),
+            ]
+    rot_maping_to_preset: bpy.props.BoolVectorProperty(name="", default=(True,True,True,) ,subtype='XYZ')
+    rot_maping_from_preset: bpy.props.PointerProperty(type=RNA_PROP_rot_maping_from_preset)
+    rot_maping_invert_preset: bpy.props.BoolVectorProperty(name="", default=(False,False,False,) ,subtype='XYZ')
+    rot_maping_euler_order_preset: bpy.props.EnumProperty(items=_ENUM_EULER_ORDER, name="", default='AUTO')
+
+    scale_mapping_preset: bpy.props.BoolVectorProperty(name="", default=(True,True,True,) ,subtype='XYZ')
+
+    mark_host_bones: list[bpy.types.PoseBone]
+    mark_target_bones: list[bpy.types.PoseBone]
+
+
+class _PROTOTYPE_VIEW_3D_PT_ui():
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
-    bl_category = 'Retargeter'
-    bl_label = 'Simple Retargeter'
+    bl_category = 'Retargetor'
+    bl_label = 'Simple Retargetor'
 
 
-class VIEW_3D_PT_ui_obj(VIEW_3D_PT_ui_proto, bpy.types.Panel):
+class VIEW_3D_PT_ui_obj(_PROTOTYPE_VIEW_3D_PT_ui, bpy.types.Panel):
     bl_idname = f"VIEW_3D_PT_{_ID_PREFIX}_ui_obj"
 
     @classmethod
@@ -67,33 +76,74 @@ class VIEW_3D_PT_ui_obj(VIEW_3D_PT_ui_proto, bpy.types.Panel):
         row = layout.row(align=True)
         row.label(text="In Object mode", icon='OBJECT_DATAMODE')
 
-        layout.separator(factor=1.0, type='LINE')
+        _ctx_prop_ref = context.scene.simple_retargeting_prop
 
-        warning_counter = 0
+
+        # Location
+        layout.separator(factor=1.0, type='LINE')
+        col = layout.column(align=True)
+        row = layout.row(align=True)
+        col.label(text="Copy Location:")
+        row.prop(_ctx_prop_ref, "loc_maping_preset", toggle=1,)
+
+        layout.separator(factor=1.0, type='SPACE')
+
+        # Rotation
+        col = layout.column(align=True)
+        col.label(text="Copy Rotation:")
+        col = layout.column(align=True)
+        row = col.row(align=True)
+        row.prop(_ctx_prop_ref, "rot_maping_to_preset", toggle=1,)
+
+
+        # Rotation Euler XYZ map from
+        row = layout.row(align=True)
+
+        #X
+        col_x = row.column(align=True)
+        col_x.label(text="X from:")
+        col_x.prop(_ctx_prop_ref.rot_maping_from_preset, "x_from", toggle=1,)
+
+        row.separator(factor=1.0, type='SPACE')
+
+
+        #Y
+        col_y = row.column(align=True)
+        col_y.label(text="Y from:")
+        col_y.prop(_ctx_prop_ref.rot_maping_from_preset, "y_from", toggle=1,)
+
+        row.separator(factor=1.0, type='SPACE')
+
+
+        #Z
+        col_z = row.column(align=True)
+        col_z.label(text="Z from:")
+        col_z.prop(_ctx_prop_ref.rot_maping_from_preset, "z_from", toggle=1,)
 
         col = layout.column(align=True)
-        armature_prop = context.scene.simple_retargeting_prop
-        if armature_prop.armature_host == None:
-            col.label(text="WARNING : please select armature host")
-            warning_counter+=1
-        if armature_prop.armature_host == None:
-            col.label(text="WARNING : please select armature target")
-            warning_counter+=1
-        if warning_counter == 0:
-            col.label(text="NO WARNING")
-        else:
-            col.label(text=f"WARNING count {warning_counter}")
-        layout.separator(factor=1.0, type='LINE')
-        col = layout.column(align=False)
-        # SEE: def _prop_register()
-        col.prop(context.scene.simple_retargeting_prop, 'armature_host', text="Host")
-        col.prop(context.scene.simple_retargeting_prop, 'armature_target', text="Target")
+        col.label(text="Invert:")
+        row = col.row(align=True)
+        row.prop(_ctx_prop_ref, "rot_maping_invert_preset", toggle=1,)
+
+        # Rotation Euler Order
+        col = layout.column(align=True)
+        col.label(text="Euler Order")
+        row = col.row(align=True)
+        row.prop(_ctx_prop_ref, "rot_maping_euler_order_preset")
 
 
+        # Scale
+        col = layout.column(align=True)
+        col.separator(factor=2.0, type='SPACE')
+        col.label(text="Copy Scale:")
+        col = layout.column(align=True)
+        row = col.row(align=True)
+        row.prop(_ctx_prop_ref, "scale_mapping_preset", toggle=1,)
+        # cale axis swap/mapping, inherit from rotation axis swap/mapping
 
 
 def _prop_register():
-    bpy.types.Scene.simple_retargeting_prop = bpy.props.PointerProperty(type=RNA_PROP_Simple_retargeting)
+    bpy.types.Scene.simple_retargeting_prop = bpy.props.PointerProperty(type=RNA_PROP_simple_retargeting)
 
 
 def _prop_unregister():
@@ -101,7 +151,8 @@ def _prop_unregister():
 
 
 _classes = (
-        RNA_PROP_Simple_retargeting,
+        RNA_PROP_rot_maping_from_preset,
+        RNA_PROP_simple_retargeting,
         VIEW_3D_PT_ui_obj,
         )
 
@@ -115,5 +166,13 @@ def register():
 def unregister():
     _class_unregister()
     _prop_unregister()
+
+
+
+# |
+# X Z Y
+# Y X Z
+# Z Y X -
+
 
 
