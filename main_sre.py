@@ -63,21 +63,28 @@ class _PROTOTYPE_VIEW_3D_PT_ui():
     bl_label = 'Simple Retargetor'
 
 
-class VIEW_3D_PT_ui_obj(_PROTOTYPE_VIEW_3D_PT_ui, bpy.types.Panel):
+class VIEW_3D_PT_ui_master(_PROTOTYPE_VIEW_3D_PT_ui, bpy.types.Panel):
     bl_idname = f"VIEW_3D_PT_{_ID_PREFIX}_ui_obj"
 
-    @classmethod
-    def poll(cls, context):
-        return bpy.context.mode == 'OBJECT'
+
+    # TODO : make sure that UI onlly show in 'POSE'
+    # @classmethod
+    # def poll(cls, context):
+    #     return context.mode == 'OBJECT'
 
     def draw(self, context):
         layout = self.layout
+        layout.use_property_split = False
+        layout.use_property_decorate = False
 
         row = layout.row(align=True)
         row.label(text="In Object mode", icon='OBJECT_DATAMODE')
 
         _ctx_prop_ref = context.scene.simple_retargeting_prop
 
+
+        # TODO : split location, rotation, scale In to it's own sub panel
+        # SEE API DOC : bl_owner_id
 
         # Location
         layout.separator(factor=1.0, type='LINE')
@@ -139,7 +146,7 @@ class VIEW_3D_PT_ui_obj(_PROTOTYPE_VIEW_3D_PT_ui, bpy.types.Panel):
         col = layout.column(align=True)
         row = col.row(align=True)
         row.prop(_ctx_prop_ref, "scale_mapping_preset", toggle=1,)
-        # cale axis swap/mapping, inherit from rotation axis swap/mapping
+        # Scale axis swap/mapping, inherit from rotation axis swap/mapping
 
 
 def _prop_register():
@@ -153,7 +160,7 @@ def _prop_unregister():
 _classes = (
         RNA_PROP_rot_maping_from_preset,
         RNA_PROP_simple_retargeting,
-        VIEW_3D_PT_ui_obj,
+        VIEW_3D_PT_ui_master,
         )
 
 _class_register, _class_unregister = bpy.utils.register_classes_factory(_classes)
@@ -166,13 +173,4 @@ def register():
 def unregister():
     _class_unregister()
     _prop_unregister()
-
-
-
-# |
-# X Z Y
-# Y X Z
-# Z Y X -
-
-
 
