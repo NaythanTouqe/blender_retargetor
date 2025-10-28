@@ -144,12 +144,30 @@ class VIEW_3D_PT_ui_sub_scale(_PROTOTYPE_VIEW_3D_PT_ui, bpy.types.Panel):
 
 
 
+class VIEW_3D_PT_ui_sub_operation(_PROTOTYPE_VIEW_3D_PT_ui, bpy.types.Panel):
+    bl_label = 'Operation'
+    bl_idname = f"VIEW_3D_PT_{common._ID_PREFIX}_ui_sub_operation"
+    bl_parent_id = f"VIEW_3D_PT_{common._ID_PREFIX}_ui_master"
+
+    def draw(self, context):
+        layout = self.layout
+        layout.use_property_split = False
+        layout.use_property_decorate = False
+
+        #see: ./properties.py -> def register()
+        _CTX_PROP_REF = context.scene.simple_retargetor_prop
+
+        # TODO : glue the ops implementation to ui button after I make the implement ops.
+
+
+
 
 _classes = (
         VIEW_3D_PT_ui_master,
         VIEW_3D_PT_ui_sub_location,
         VIEW_3D_PT_ui_sub_rotation,
         VIEW_3D_PT_ui_sub_scale,
+        VIEW_3D_PT_ui_sub_operation,
         )
 
 _class_register, _class_unregister = bpy.utils.register_classes_factory(_classes)
