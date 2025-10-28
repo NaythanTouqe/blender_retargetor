@@ -11,7 +11,7 @@ class PROP_rot_maping_preset(bpy.types.PropertyGroup):
             subtype='XYZ',
             )
 
-    invert_preset: bpy.props.BoolVectorProperty(
+    to_invert_xyz: bpy.props.BoolVectorProperty(
             name="",
             default=(False,False,False,),
             subtype='XYZ',
@@ -27,7 +27,7 @@ class PROP_rot_maping_preset(bpy.types.PropertyGroup):
             ('ZYX', "ZYX Euler",     "", '', 6),
             ]
 
-    euler_order_preset: bpy.props.EnumProperty(
+    euler_order: bpy.props.EnumProperty(
             items=_ENUM_EULER_ORDER,
             name="",
             default='AUTO',

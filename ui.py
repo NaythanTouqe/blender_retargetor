@@ -77,58 +77,58 @@ class VIEW_3D_PT_ui_sub_location(
 
 
 
-# #ROT
-# class VIEW_3D_PT_ui_sub_rotation(_PROTOTYPE_VIEW_3D_PT_ui, bpy.types.Panel):
-#     bl_label = 'Copy Location'
-#     bl_idname = f"VIEW_3D_PT_{common._ID_PREFIX}_ui_sub_rotation"
-#     bl_parent_id = f"VIEW_3D_PT_{common._ID_PREFIX}_ui_master"
-#
-#
-#     def draw(self, context):
-#         layout = self.layout
-#         layout.use_property_split = False
-#         layout.use_property_decorate = False
-#
-#         #see: ./properties.py -> def register()
-#         _ctx_prop_ref = context.scene.simple_retargetor_prop
-#
-#         # Axis_to_map
-#         col = layout.column(align=True)
-#         col.label(text="Copy Rotation:")
-#         col = layout.column(align=True)
-#         row = col.row(align=True)
-#         row.prop(_ctx_prop_ref.rot_preset_group, "rot_maping_to_preset", toggle=1,)
-#
-#         # Rotation Euler XYZ map from
-#         row = layout.row(align=True)
-#         #X
-#         col_x = row.column(align=True)
-#         col_x.label(text="X from:")
-#         col_x.prop(_ctx_prop_ref.rot_maping_from_preset, "x_from", toggle=1,)
-#         row.separator(factor=1.0, type='SPACE')
-#         #Y
-#         col_y = row.column(align=True)
-#         col_y.label(text="Y from:")
-#         col_y.prop(_ctx_prop_ref.rot_maping_from_preset, "y_from", toggle=1,)
-#         row.separator(factor=1.0, type='SPACE')
-#         #Z
-#         col_z = row.column(align=True)
-#         col_z.label(text="Z from:")
-#         col_z.prop(_ctx_prop_ref.rot_maping_from_preset, "z_from", toggle=1,)
-#
-#         #Axis to inverted
-#         col = layout.column(align=True)
-#         col.label(text="Invert:")
-#         row = col.row(align=True)
-#         row.prop(_ctx_prop_ref, "rot_maping_invert_preset", toggle=1,)
-#
-#         # Rotation Euler Order
-#         col = layout.column(align=True)
-#         col.label(text="Euler Order")
-#         row = col.row(align=True)
-#         row.prop(_ctx_prop_ref, "rot_maping_euler_order_preset")
-#
-#         layout.separator(factor=1.0, type='SPACE')
+#ROT
+class VIEW_3D_PT_ui_sub_rotation(_PROTOTYPE_VIEW_3D_PT_ui, bpy.types.Panel):
+    bl_label = 'Copy Location'
+    bl_idname = f"VIEW_3D_PT_{common._ID_PREFIX}_ui_sub_rotation"
+    bl_parent_id = f"VIEW_3D_PT_{common._ID_PREFIX}_ui_master"
+
+
+    def draw(self, context):
+        layout = self.layout
+        layout.use_property_split = False
+        layout.use_property_decorate = False
+
+        #see: ./properties.py -> def register()
+        _CTX_PROP_REF = context.scene.simple_retargetor_prop
+
+        # Axis_to_map
+        col = layout.column(align=True)
+        col.label(text="Copy Rotation:")
+        col = layout.column(align=True)
+        row = col.row(align=True)
+        row.prop(_CTX_PROP_REF.rot_preset_group, "to_map_xyz", toggle=1,)
+
+        # Rotation Euler XYZ map from
+        row = layout.row(align=True)
+        #X
+        col_x = row.column(align=True)
+        col_x.label(text="X from:")
+        col_x.prop(_CTX_PROP_REF.rot_preset_group, "x_from", toggle=1,)
+        row.separator(factor=1.0, type='SPACE')
+        #Y
+        col_y = row.column(align=True)
+        col_y.label(text="Y from:")
+        col_y.prop(_CTX_PROP_REF.rot_preset_group, "y_from", toggle=1,)
+        row.separator(factor=1.0, type='SPACE')
+        #Z
+        col_z = row.column(align=True)
+        col_z.label(text="Z from:")
+        col_z.prop(_CTX_PROP_REF.rot_preset_group, "z_from", toggle=1,)
+
+        #Axis to inverted
+        col = layout.column(align=True)
+        col.label(text="Invert:")
+        row = col.row(align=True)
+        row.prop(_CTX_PROP_REF.rot_preset_group, "to_invert_xyz", toggle=1,)
+
+        # Rotation Euler Order
+        col = layout.column(align=True)
+        col.label(text="Euler Order")
+        row = col.row(align=True)
+        row.prop(_CTX_PROP_REF.rot_preset_group, "euler_order")
+
+        layout.separator(factor=1.0, type='SPACE')
 
 
 
@@ -136,6 +136,7 @@ class VIEW_3D_PT_ui_sub_location(
 _classes = (
         VIEW_3D_PT_ui_master,
         VIEW_3D_PT_ui_sub_location,
+        VIEW_3D_PT_ui_sub_rotation,
         )
 
 _class_register, _class_unregister = bpy.utils.register_classes_factory(_classes)
