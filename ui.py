@@ -40,15 +40,6 @@ class VIEW_3D_PT_ui_master(
         # # SEE API DOC : bl_owner_id
 
 
-        # # Scale
-        # col = layout.column(align=True)
-        # col.separator(factor=2.0, type='SPACE')
-        # col.label(text="Copy Scale:")
-        # col = layout.column(align=True)
-        # row = col.row(align=True)
-        # row.prop(_ctx_prop_ref, "scale_mapping_preset", toggle=1,)
-        # # Scale axis swap/mapping, inherit from rotation axis swap/mapping
-
 
 
 #LOC
@@ -79,7 +70,7 @@ class VIEW_3D_PT_ui_sub_location(
 
 #ROT
 class VIEW_3D_PT_ui_sub_rotation(_PROTOTYPE_VIEW_3D_PT_ui, bpy.types.Panel):
-    bl_label = 'Copy Location'
+    bl_label = 'Copy Rotation'
     bl_idname = f"VIEW_3D_PT_{common._ID_PREFIX}_ui_sub_rotation"
     bl_parent_id = f"VIEW_3D_PT_{common._ID_PREFIX}_ui_master"
 
@@ -95,8 +86,7 @@ class VIEW_3D_PT_ui_sub_rotation(_PROTOTYPE_VIEW_3D_PT_ui, bpy.types.Panel):
         # Axis_to_map
         col = layout.column(align=True)
         col.label(text="Copy Rotation:")
-        col = layout.column(align=True)
-        row = col.row(align=True)
+        row = layout.row(align=True)
         row.prop(_CTX_PROP_REF.rot_preset_group, "to_map_xyz", toggle=1,)
 
         # Rotation Euler XYZ map from
@@ -133,10 +123,33 @@ class VIEW_3D_PT_ui_sub_rotation(_PROTOTYPE_VIEW_3D_PT_ui, bpy.types.Panel):
 
 
 
+#SCALE
+class VIEW_3D_PT_ui_sub_scale(_PROTOTYPE_VIEW_3D_PT_ui, bpy.types.Panel):
+    bl_label = 'Copy Scale'
+    bl_idname = f"VIEW_3D_PT_{common._ID_PREFIX}_ui_sub_scale"
+    bl_parent_id = f"VIEW_3D_PT_{common._ID_PREFIX}_ui_master"
+
+    def draw(self, context):
+        layout = self.layout
+        layout.use_property_split = False
+        layout.use_property_decorate = False
+
+        #see: ./properties.py -> def register()
+        _CTX_PROP_REF = context.scene.simple_retargetor_prop
+
+        row = layout.row(align=True)
+        row.prop(_CTX_PROP_REF, "scale_want_to_map", toggle=1,)
+        # Scale axis swap/mapping, inherit from rotation axis swap/mapping
+
+
+
+
+
 _classes = (
         VIEW_3D_PT_ui_master,
         VIEW_3D_PT_ui_sub_location,
         VIEW_3D_PT_ui_sub_rotation,
+        VIEW_3D_PT_ui_sub_scale,
         )
 
 _class_register, _class_unregister = bpy.utils.register_classes_factory(_classes)
