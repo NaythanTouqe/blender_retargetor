@@ -27,3 +27,23 @@ class MarkHostPoseBonesOperator(bpy.types.Operator):
         print("Hello World")
         return {'FINISHED'}
 
+
+
+
+
+# _classes = (
+#         )
+#
+# _class_register, _class_unregister = bpy.utils.register_classes_factory(_classes)
+
+def register():
+    # _class_register()
+    pass
+
+
+def unregister():
+    # _class_unregister()
+    pass
+
+
+

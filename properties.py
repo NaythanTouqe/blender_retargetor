@@ -1,4 +1,5 @@
 import bpy
+from . import common
 
 
 # SEE: PROP_simple_retargetor -> rot_mapping_preset
@@ -59,28 +60,28 @@ class PROP_rot_maping_preset(bpy.types.PropertyGroup):
 
 # SEE: _prop_register()
 class PROP_simple_retargetor(bpy.types.PropertyGroup):
-    loc_maping_preset: bpy.props.BoolVectorProperty(
+    loc_want_to_map: bpy.props.BoolVectorProperty(
             name="",
             default=(True,True,True,),
             subtype='XYZ'
             )
 
-    rot_mapping_preset: bpy.props.PointerProperty(
+    rot_preset_group: bpy.props.PointerProperty(
             type=PROP_rot_maping_preset
             )
 
 
-    scale_mapping_preset: bpy.props.BoolVectorProperty(
+    scale_want_to_map: bpy.props.BoolVectorProperty(
             name="",
             default=(True,True,True,),
             subtype='XYZ'
             )
 
-    mark_host_bones: list[bpy.types.PoseBone]
-    mark_target_bones: list[bpy.types.PoseBone]
+    mark_host_bones_list: list[bpy.types.PoseBone]
+    mark_target_bones_list: list[bpy.types.PoseBone]
 
 
-_class = (
+_classes = (
         PROP_rot_maping_preset,
         PROP_simple_retargetor,
         )
@@ -93,5 +94,7 @@ def register():
 
 
 def unregister():
+    # WHAT THE FUCK??? and I HAVE NO IDEA.
+    # But if I comment it out she(Blenda) seem to stop puking out Error everytime when force reload for now.
+    # del bpy.types.Scene.PROP_simple_retageting
     _class_unregister()
-    del bpy.types.Scene.PROP_simple_retageting
