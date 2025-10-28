@@ -1,22 +1,33 @@
-_need_reload = "main_sre" in locals()
+_need_reload = "common" in locals()
 
 import bpy
-from . import main_sre
+from . import common # static or constant stuff. so... no register & unregister.
+from . import properties
 
 if _need_reload:
     import importlib
-    main_sre = importlib.reload(main_sre)
-    print("simple retargeting extention : reloading")
+
+    common = importlib.reload(common)
+    properties = importlib.reload(properties)
+    operation = importlib.reload(operation)
+    ui = importlib.reload(ui)
+
+    print("simple retargeting extention : reloaded")
 
 
 
 def register():
-    main_sre.register()
+    properties.register()
+    operation.register()
+    ui.register()
 
 
 def unregister():
-    main_sre.unregister()
+    properties.unregister()
+    operation.unregister()
+    ui.unregister()
 
 
 if __name__ == "__main__":
+    print("this is an Extension. Run it like one. Please~")
     register()
