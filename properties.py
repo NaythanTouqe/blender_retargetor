@@ -94,7 +94,5 @@ def register():
 
 
 def unregister():
-    # WHAT THE FUCK??? and I HAVE NO IDEA.
-    # But if I comment it out she(Blenda) seem to stop puking out Error everytime when force reload for now.
-    # del bpy.types.Scene.PROP_simple_retageting
+    del bpy.types.Scene.simple_retargetor_prop
     _class_unregister()
