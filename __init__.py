@@ -2,6 +2,7 @@ _need_reload = "ui" in locals()
 
 import bpy
 from . import common # static or constant stuff. so... no register & unregister.
+from . import runtime_var # thing that populate at runtime. so... no register & unregister.
 from . import properties
 from . import operation
 from . import ui
@@ -11,6 +12,7 @@ if _need_reload:
     import importlib
 
     common = importlib.reload(common)
+    runtime_var = importlib.reload(runtime_var)
     properties = importlib.reload(properties)
     operation = importlib.reload(operation)
     ui = importlib.reload(ui)
