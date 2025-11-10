@@ -1,5 +1,6 @@
 import bpy
 from . import common
+from . import operation
 
 
 class _PROTOTYPE_VIEW_3D_PT_ui():
@@ -26,18 +27,6 @@ class VIEW_3D_PT_ui_master(
 
     def draw(self, context):
         pass
-        # layout = self.layout
-        # layout.use_property_split = False
-        # layout.use_property_decorate = False
-
-        # row = layout.row(align=True)
-        # row.label(text="In Object mode", icon='OBJECT_DATAMODE')
-        #
-        # _ctx_prop_ref = context.scene.simple_retargeting_prop
-
-
-        # # TODO : split location, rotation, scale In to it's own sub panel
-        # # SEE API DOC : bl_owner_id
 
 
 
@@ -154,8 +143,14 @@ class VIEW_3D_PT_ui_sub_operation(_PROTOTYPE_VIEW_3D_PT_ui, bpy.types.Panel):
         layout.use_property_split = False
         layout.use_property_decorate = False
 
-        #see: ./properties.py -> def register()
-        _CTX_PROP_REF = context.scene.simple_retargetor_prop
+        # marking bones
+        row = layout.row(align=True)
+        row.operator(operation.BL_ID_MARK_HOST_POSE_BONES_OPS)
+        row.operator(operation.BL_ID_MARK_TARGET_POSE_BONES_OPS)
+
+        # driver fuckery ui
+        row = layout.row(align=True)
+        row.operator(operation.BL_ID_BIND_DRIVER_OPS)
 
         # TODO : glue the ops implementation to ui button after I make the implement ops.
 

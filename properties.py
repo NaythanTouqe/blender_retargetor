@@ -58,7 +58,7 @@ class PROP_rot_maping_preset(bpy.types.PropertyGroup):
             )
 
 
-# SEE: _prop_register()
+# SEE: register()
 class PROP_simple_retargetor(bpy.types.PropertyGroup):
     loc_want_to_map: bpy.props.BoolVectorProperty(
             name="",
@@ -77,8 +77,7 @@ class PROP_simple_retargetor(bpy.types.PropertyGroup):
             subtype='XYZ'
             )
 
-    mark_host_bones_list: list[bpy.types.PoseBone]
-    mark_target_bones_list: list[bpy.types.PoseBone]
+
 
 
 _classes = (
