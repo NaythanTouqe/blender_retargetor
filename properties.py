@@ -1,6 +1,21 @@
 import bpy
 from . import common
 
+_ENUM_XYZ_ITEMS = [
+            ('x', "X", "", '', 0),
+            ('y', "Y", "", '', 1),
+            ('z', "Z", "", '', 2),
+            ]
+
+_ENUM_EULER_ORDER = [
+        ('AUTO',"Auto selected", "", '', 0),
+        ('XYZ', "XYZ Euler",     "", '', 1),
+        ('XZY', "XZY Euler",     "", '', 2),
+        ('YXZ', "YXZ Euler",     "", '', 3),
+        ('YZX', "YZX Euler",     "", '', 4),
+        ('ZXY', "ZXY Euler",     "", '', 5),
+        ('ZYX', "ZYX Euler",     "", '', 6),
+        ]
 
 # SEE: PROP_simple_retargetor -> rot_mapping_preset
 class PROP_rot_maping_preset(bpy.types.PropertyGroup):
@@ -17,27 +32,12 @@ class PROP_rot_maping_preset(bpy.types.PropertyGroup):
             subtype='XYZ',
             )
 
-    _ENUM_EULER_ORDER = [
-            ('AUTO',"Auto selected", "", '', 0),
-            ('XYZ', "XYZ Euler",     "", '', 1),
-            ('XZY', "XZY Euler",     "", '', 2),
-            ('YXZ', "YXZ Euler",     "", '', 3),
-            ('YZX', "YZX Euler",     "", '', 4),
-            ('ZXY', "ZXY Euler",     "", '', 5),
-            ('ZYX', "ZYX Euler",     "", '', 6),
-            ]
-
     euler_order: bpy.props.EnumProperty(
             items=_ENUM_EULER_ORDER,
             name="",
             default='AUTO',
             )
 
-    _ENUM_XYZ_ITEMS = [
-                ('x', "X", "", '', 0),
-                ('y', "Y", "", '', 1),
-                ('z', "Z", "", '', 2),
-                ]
 
     x_from: bpy.props.EnumProperty(
             items=_ENUM_XYZ_ITEMS,

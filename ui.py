@@ -144,15 +144,20 @@ class VIEW_3D_PT_ui_sub_operation(_PROTOTYPE_VIEW_3D_PT_ui, bpy.types.Panel):
         layout.use_property_decorate = False
 
         # marking bones
-        row = layout.row(align=True)
+        col = layout.column(align=True)
+        row = col.row(align=True)
         row.operator(operation.BL_ID_MARK_HOST_POSE_BONES_OPS)
         row.operator(operation.BL_ID_MARK_TARGET_POSE_BONES_OPS)
 
-        # driver fuckery ui
-        row = layout.row(align=True)
-        row.operator(operation.BL_ID_BIND_DRIVER_OPS)
+        row = col.row(align=True)
+        row.operator(operation.BL_ID_SELECT_MARK_HOST_POSE_BONES_OPS)
+        row.operator(operation.BL_ID_SELECT_MARK_TARGET_POSE_BONES_OPS)
 
-        # TODO : glue the ops implementation to ui button after I make the implement ops.
+        # driver fuckery ui
+        col = layout.column(align=True)
+        col.operator(operation.BL_ID_BIND_DRIVER_OPS)
+        col.operator(operation.BL_ID_CLEAR_DRIVER_FROM_SELECTED)
+
 
 
 
