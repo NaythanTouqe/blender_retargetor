@@ -31,30 +31,37 @@ class VIEW_3D_PT_ui_master(
 
 
 
-#LOC
-class VIEW_3D_PT_ui_sub_location(
+class VIEW_3D_PT_ui_sub_tranform(
         _PROTOTYPE_VIEW_3D_PT_ui,
         bpy.types.Panel
         ):
-    bl_label = 'Copy Location'
-    bl_idname = f"VIEW_3D_PT_{common._ID_PREFIX}_ui_sub_location"
+    bl_label = 'Copy Tranform'
+    bl_idname = f"VIEW_3D_PT_{common._ID_PREFIX}_ui_sub_tranform"
     bl_parent_id = f"VIEW_3D_PT_{common._ID_PREFIX}_ui_master"
+    bl_option = {"HEADER_LAYOUT_EXPAND",}
+
 
 
     def draw(self, context):
         layout = self.layout
         layout.use_property_split = False
-        layout.use_property_decorate = False
+        layout.use_property_decorate = True
 
         #see: ./properties.py -> def register()
         _CTX_PROP_REF = context.scene.simple_retargetor_prop
 
+        #LOC
         row = layout.row(align=True)
-        row.prop(_CTX_PROP_REF, "loc_want_to_map", toggle=1,)
+        label_col = row.column(align=True)
+        label_col.alignment = 'LEFT'
+        label_col.label(text="Location : ")
+        row.prop(_CTX_PROP_REF, "loc_want_to_map", toggle=1, expand=True,)
 
-        layout.separator(factor=1.0, type='SPACE')
-
-
+        row = layout.row(align=True)
+        label_col = row.column(align=True)
+        label_col.alignment = 'LEFT'
+        label_col.label(text="Axis Origin : ")
+        row.prop(_CTX_PROP_REF, "loc_want_to_map", toggle=1, expand=True,)
 
 
 #ROT
@@ -146,12 +153,12 @@ class VIEW_3D_PT_ui_sub_operation(_PROTOTYPE_VIEW_3D_PT_ui, bpy.types.Panel):
         # marking bones
         col = layout.column(align=True)
         row = col.row(align=True)
-        row.operator(operation.BL_ID_MARK_HOST_POSE_BONES_OPS)
-        row.operator(operation.BL_ID_MARK_TARGET_POSE_BONES_OPS)
+        row.operator(operation.BL_ID_ASSIGN_HOST_OPS)
+        row.operator(operation.BL_ID_ASSIGN_TARGET_OPS)
 
         row = col.row(align=True)
-        row.operator(operation.BL_ID_SELECT_MARK_HOST_POSE_BONES_OPS)
-        row.operator(operation.BL_ID_SELECT_MARK_TARGET_POSE_BONES_OPS)
+        row.operator(operation.BL_ID_SELECT_HOST_OPS)
+        row.operator(operation.BL_ID_SELECT_TARGET_OPS)
 
         # driver fuckery ui
         col = layout.column(align=True)
@@ -164,7 +171,7 @@ class VIEW_3D_PT_ui_sub_operation(_PROTOTYPE_VIEW_3D_PT_ui, bpy.types.Panel):
 
 _classes = (
         VIEW_3D_PT_ui_master,
-        VIEW_3D_PT_ui_sub_location,
+        VIEW_3D_PT_ui_sub_tranform,
         VIEW_3D_PT_ui_sub_rotation,
         VIEW_3D_PT_ui_sub_scale,
         VIEW_3D_PT_ui_sub_operation,

@@ -14,6 +14,12 @@
 # >>> dv_var.targets[0].id
 # bpy.data.objects['metarig']
 
+
+
+#TODO: auto detect rotation system (euler or quaternion)
+#TODO: auto select rotation system driver mapping (euler or quaternion)
+#TODO: quaternion swap axis driver
+
 # variable_acronym
 # sel       = Select/Selected
 # mk        = Mark
@@ -32,18 +38,10 @@ from . import properties
 
 
 
-#internal util.
-def _is_list_none_or_empty(in_list):
-    if in_list == None: return True
-    if in_list == []: return True
-    return False
-
-
 # Error checking
-# Err. No mark bone to operate on.
-def is_there_any_bone_to_operate_on(pbL):
-    if _is_list_none_or_empty(pbL):
-        return False
+def is_there_any_bone_to_operate_on(in_list):
+    if in_list == None: return False
+    if in_list == []: return False
     return True
 
 
@@ -56,11 +54,11 @@ ERR_MSG_NO_MARKED_BONE = "No marked pose bones"
 #TODO: add description detail
 ERR_MSG_ASYMMETRIC_MARKED_BONE = "Asymmetric marked bone"
 
-BL_ID_MARK_HOST_POSE_BONES_OPS = f"{common._ID_PREFIX}.mark_host_pose_bones"
-class MarkHostPoseBones(bpy.types.Operator):
-    bl_idname = BL_ID_MARK_HOST_POSE_BONES_OPS
-    bl_label = "Mark Host Bones"
-    bl_description = "" # TODO add description.
+BL_ID_ASSIGN_HOST_OPS = f"{common._ID_PREFIX}.assign_host"
+class AssignHost(bpy.types.Operator):
+    bl_idname = BL_ID_ASSIGN_HOST_OPS
+    bl_label = "Assign Host"
+    bl_description = "Mark a list of bones as the origin.\nThe list of bones where to take the data from"
     bl_options = {'REGISTER',}
 
     def execute(self, context):
@@ -74,11 +72,11 @@ class MarkHostPoseBones(bpy.types.Operator):
 
 
 
-BL_ID_MARK_TARGET_POSE_BONES_OPS = f"{common._ID_PREFIX}.mark_target_pose_bones"
-class MarkTargetPoseBones(bpy.types.Operator):
-    bl_idname = BL_ID_MARK_TARGET_POSE_BONES_OPS
-    bl_label = "Mark Target Bones"
-    bl_description = "" # TODO add description.
+BL_ID_ASSIGN_TARGET_OPS = f"{common._ID_PREFIX}.assign_target"
+class AssignTarget(bpy.types.Operator):
+    bl_idname = BL_ID_ASSIGN_TARGET_OPS
+    bl_label = "Assign Target"
+    bl_description = "Mark a list of bones as the target.\nThe list of bones where to put the data into"
     bl_options = {'REGISTER',}
 
     def execute(self, context):
@@ -91,10 +89,10 @@ class MarkTargetPoseBones(bpy.types.Operator):
 
 
 # select marked bone operation
-BL_ID_SELECT_MARK_HOST_POSE_BONES_OPS = f"{common._ID_PREFIX}.select_mark_host_pose_bones"
-class SelectMarkHostPoseBones(bpy.types.Operator):
-    bl_idname = BL_ID_SELECT_MARK_HOST_POSE_BONES_OPS
-    bl_label = "Select Mark Host Bones"
+BL_ID_SELECT_HOST_OPS = f"{common._ID_PREFIX}.select_host"
+class SelectHost(bpy.types.Operator):
+    bl_idname = BL_ID_SELECT_HOST_OPS
+    bl_label = "Select Host"
     bl_description = "" # TODO add description.
     bl_options = {'REGISTER',}
 
@@ -108,10 +106,10 @@ class SelectMarkHostPoseBones(bpy.types.Operator):
         return {'FINISHED'}
 
 
-BL_ID_SELECT_MARK_TARGET_POSE_BONES_OPS = f"{common._ID_PREFIX}.select_mark_target_pose_bones"
-class SelectMarkTargetPoseBones(bpy.types.Operator):
-    bl_idname = BL_ID_SELECT_MARK_TARGET_POSE_BONES_OPS
-    bl_label = "Select Mark Target Bones"
+BL_ID_SELECT_TARGET_OPS = f"{common._ID_PREFIX}.select_target"
+class SelectTarget(bpy.types.Operator):
+    bl_idname = BL_ID_SELECT_TARGET_OPS
+    bl_label = "Select Target"
     bl_description = "" # TODO add description.
     bl_options = {'REGISTER',}
 
@@ -254,6 +252,7 @@ class BindDriver(bpy.types.Operator):
             x = AXIS_X
             y = AXIS_Y
             z = AXIS_Z
+            # SEE: properties.py -> _ENUM_EULER_ORDER for those magic number
             if swaped_xyz_list == [x, y, z]: return properties._ENUM_EULER_ORDER[1][0]
             if swaped_xyz_list == [x, z, y]: return properties._ENUM_EULER_ORDER[2][0]
             if swaped_xyz_list == [y, x, z]: return properties._ENUM_EULER_ORDER[3][0]
@@ -272,7 +271,10 @@ class BindDriver(bpy.types.Operator):
                     if mk_t_pbL[idx].rotation_mode != euler_order:
                         mk_t_pbL[idx].rotation_mode = euler_order
                 else:
+                    # if no any ROT axis enable. default to QUATERNION
                     mk_t_pbL[idx].rotation_mode = 'QUATERNION'
+            else:
+                mk_t_pbL[idx].rotation_mode = rot_euler_order
 
             # setup driver
             for axis in [AXIS_X, AXIS_Y, AXIS_Z]:
@@ -322,10 +324,10 @@ class ClearDriverFromSelected(bpy.types.Operator):
         return {'FINISHED'}
 
 _classes = (
-        MarkHostPoseBones,
-        MarkTargetPoseBones,
-        SelectMarkHostPoseBones,
-        SelectMarkTargetPoseBones,
+        AssignHost,
+        AssignTarget,
+        SelectHost,
+        SelectTarget,
         ClearDriverFromSelected,
         BindDriver,
         )

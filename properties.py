@@ -18,6 +18,40 @@ _ENUM_EULER_ORDER = [
         ]
 
 # SEE: PROP_simple_retargetor -> rot_mapping_preset
+class PROP_loc_maping_preset(bpy.types.PropertyGroup):
+
+    to_map_xyz: bpy.props.BoolVectorProperty(
+            name="",
+            default=(True,True,True,),
+            subtype='XYZ',
+            )
+
+    to_invert_xyz: bpy.props.BoolVectorProperty(
+            name="",
+            default=(False,False,False,),
+            subtype='XYZ',
+            )
+
+    x_from: bpy.props.EnumProperty(
+            items=_ENUM_XYZ_ITEMS,
+            name="",
+            default='x',
+            )
+
+    y_from: bpy.props.EnumProperty(
+            items=_ENUM_XYZ_ITEMS,
+            name="",
+            default='y',
+            )
+
+    z_from: bpy.props.EnumProperty(
+            items=_ENUM_XYZ_ITEMS,
+            name="",
+            default='z',
+            )
+
+
+# SEE: PROP_simple_retargetor -> rot_mapping_preset
 class PROP_rot_maping_preset(bpy.types.PropertyGroup):
 
     to_map_xyz: bpy.props.BoolVectorProperty(
