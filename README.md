@@ -27,5 +27,5 @@ yes it doable but it's just a bunch of hardcoded math nightmare.
 
 ---
 
-# after this commmit. I (Naythan Touqe) will be moving forward with a new "proxy parenting" techniqe.
+after this commmit. I (Naythan Touqe) will be moving forward with a new "proxy parenting" techniqe.
 
