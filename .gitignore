@@ -1,0 +1,6 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+build/
+*.log
+docs/_build/
+tags

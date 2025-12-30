@@ -1,0 +1,131 @@
+import bpy
+from . import common
+
+_ENUM_XYZ_ITEMS = [
+            ('x', "X", "", '', 0),
+            ('y', "Y", "", '', 1),
+            ('z', "Z", "", '', 2),
+            ]
+
+_ENUM_EULER_ORDER = [
+        ('AUTO',"Auto selected", "", '', 0),
+        ('XYZ', "XYZ Euler",     "", '', 1),
+        ('XZY', "XZY Euler",     "", '', 2),
+        ('YXZ', "YXZ Euler",     "", '', 3),
+        ('YZX', "YZX Euler",     "", '', 4),
+        ('ZXY', "ZXY Euler",     "", '', 5),
+        ('ZYX', "ZYX Euler",     "", '', 6),
+        ]
+
+# SEE: PROP_simple_retargetor -> rot_mapping_preset
+class PROP_loc_maping_preset(bpy.types.PropertyGroup):
+
+    to_map_xyz: bpy.props.BoolVectorProperty(
+            name="",
+            default=(True,True,True,),
+            subtype='XYZ',
+            )
+
+    to_invert_xyz: bpy.props.BoolVectorProperty(
+            name="",
+            default=(False,False,False,),
+            subtype='XYZ',
+            )
+
+    x_from: bpy.props.EnumProperty(
+            items=_ENUM_XYZ_ITEMS,
+            name="",
+            default='x',
+            )
+
+    y_from: bpy.props.EnumProperty(
+            items=_ENUM_XYZ_ITEMS,
+            name="",
+            default='y',
+            )
+
+    z_from: bpy.props.EnumProperty(
+            items=_ENUM_XYZ_ITEMS,
+            name="",
+            default='z',
+            )
+
+
+# SEE: PROP_simple_retargetor -> rot_mapping_preset
+class PROP_rot_maping_preset(bpy.types.PropertyGroup):
+
+    to_map_xyz: bpy.props.BoolVectorProperty(
+            name="",
+            default=(True,True,True,),
+            subtype='XYZ',
+            )
+
+    to_invert_xyz: bpy.props.BoolVectorProperty(
+            name="",
+            default=(False,False,False,),
+            subtype='XYZ',
+            )
+
+    euler_order: bpy.props.EnumProperty(
+            items=_ENUM_EULER_ORDER,
+            name="",
+            default='AUTO',
+            )
+
+
+    x_from: bpy.props.EnumProperty(
+            items=_ENUM_XYZ_ITEMS,
+            name="",
+            default='x',
+            )
+
+    y_from: bpy.props.EnumProperty(
+            items=_ENUM_XYZ_ITEMS,
+            name="",
+            default='y',
+            )
+
+    z_from: bpy.props.EnumProperty(
+            items=_ENUM_XYZ_ITEMS,
+            name="",
+            default='z',
+            )
+
+
+# SEE: register()
+class PROP_simple_retargetor(bpy.types.PropertyGroup):
+    loc_want_to_map: bpy.props.BoolVectorProperty(
+            name="",
+            default=(True,True,True,),
+            subtype='XYZ'
+            )
+
+    rot_preset_group: bpy.props.PointerProperty(
+            type=PROP_rot_maping_preset
+            )
+
+
+    scale_want_to_map: bpy.props.BoolVectorProperty(
+            name="",
+            default=(True,True,True,),
+            subtype='XYZ'
+            )
+
+
+
+
+_classes = (
+        PROP_rot_maping_preset,
+        PROP_simple_retargetor,
+        )
+
+_class_register, _class_unregister = bpy.utils.register_classes_factory(_classes)
+
+def register():
+    _class_register()
+    bpy.types.Scene.simple_retargetor_prop = bpy.props.PointerProperty(type=PROP_simple_retargetor)
+
+
+def unregister():
+    del bpy.types.Scene.simple_retargetor_prop
+    _class_unregister()
